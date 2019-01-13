@@ -8,11 +8,13 @@ public class CollectFirewoodCheckComplete : GOAPActionCheckComplete
     public override bool checkComplete(GOAPAgent agent)
     {
         var anim = agent.GetComponentInChildren<Animator>();
+        int _playerAttackStateHash = Animator.StringToHash("Base Layer.interact");
         if(agent.target != null)
         {
             if(anim.GetBool("hasInteracted"))
             {
-                Destroy(agent.target);
+                Destroy(agent.target.gameObject);
+                anim.SetBool("hasInteracted", false);
                 return true;
             }
             else return false;

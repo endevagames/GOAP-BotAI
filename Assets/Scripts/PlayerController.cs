@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
         bool shouldMove = agent.velocity.magnitude > 0.5f && agent.remainingDistance > agent.radius;
         // Update animation parameters
         anim.SetBool("walk", shouldMove);
+        if(shouldMove && (Vector3.Distance(gameObject.transform.position, agent.destination) < 4)) FaceTarget(agent.destination);
     }
 
     private void OnCollisionStay(Collision col)
@@ -39,5 +40,12 @@ public class PlayerController : MonoBehaviour
             else hitObject = null;
         }
         else hitObject = null;
+    }
+    private void FaceTarget(Vector3 destination)
+    {
+        Vector3 lookPos = destination - transform.position;
+        lookPos.y = 0;
+        Quaternion rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.05f);  
     }
 }
