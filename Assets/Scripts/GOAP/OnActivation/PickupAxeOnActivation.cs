@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CollectWoodOnActivation : GOAPActionOnActivation 
+public class PickupAxeOnActivation : GOAPActionOnActivation 
 {
     public override void onActivation(GOAPAgent agent)
     {

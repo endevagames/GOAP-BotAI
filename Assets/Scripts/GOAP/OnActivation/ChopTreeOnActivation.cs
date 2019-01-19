@@ -9,6 +9,6 @@ public class ChopTreeOnActivation : GOAPActionOnActivation
     {
         var anim = agent.GetComponentInChildren<Animator>();
         if (anim == null) Debug.Log("Animator doesn't exist");
-        else anim.SetTrigger("attack");
+        else anim.SetTrigger("tr_attack");
     }
 }

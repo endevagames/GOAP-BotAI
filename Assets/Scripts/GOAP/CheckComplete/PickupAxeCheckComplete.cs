@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CollectFirewoodCheckComplete : GOAPActionCheckComplete 
+public class PickupAxeCheckComplete : GOAPActionCheckComplete 
 {
     public override bool checkComplete(GOAPAgent agent)
     {
         var anim = agent.GetComponentInChildren<Animator>();
-        int _playerAttackStateHash = Animator.StringToHash("Base Layer.interact");
         if(agent.target != null)
         {
             if(anim.GetBool("hasPickedUp"))
             {
-                Destroy(agent.target.gameObject);
+                var controller = agent.GetComponentInParent<PlayerController>();
+                if(controller != null) controller.SetHandObject(agent.target);
                 anim.SetBool("hasPickedUp", false);
                 return true;
             }

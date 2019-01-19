@@ -7,14 +7,11 @@ public class PlayerGetWorldState : GOAPGetWorldState
     public override List<GOAPState> getWorldState(GOAPAgent agent) 
     {
 		List<GOAPState> worldData = new List<GOAPState>();
-        bool hasSword = false;
-        for(var i = 0; i < agent.carryingList.Count; i++)
-        {
-            var item = agent.carryingList[i];
-            if((item.name == "Sword") && (item.count > 0)) hasSword = true;
-        }
+        var controller = agent.GetComponentInParent<PlayerController>();
+        bool hasAxe = false;
+        if((controller != null) && (controller.hand.GetComponentInChildren<InteractableItemBase>() != null)) hasAxe = (controller.hand.GetComponentInChildren<InteractableItemBase>().tag != null);
         worldData.Add(new GOAPState("FirewoodCollected", false));
-        worldData.Add(new GOAPState("SwordEquipped", hasSword));
+        worldData.Add(new GOAPState("HasAxe", hasAxe));
         worldData.Add(new GOAPState("FirewoodAvailable", GameObject.FindGameObjectsWithTag("Firewood").Length > 0));
         return worldData;
     }

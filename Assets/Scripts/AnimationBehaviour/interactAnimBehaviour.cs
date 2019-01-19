@@ -20,7 +20,7 @@ public class interactAnimBehaviour : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //Set has interacted
-        animator.SetBool("hasInteracted", true);
+        animator.SetBool("hasPickedUp", true);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

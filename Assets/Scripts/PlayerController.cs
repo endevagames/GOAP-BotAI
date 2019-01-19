@@ -10,12 +10,14 @@ public class PlayerController : MonoBehaviour
     public NavMeshAgent agent;
     public Animator anim;
     private GameObject hitObject;
-    private int _playerAttackStateHash = Animator.StringToHash("Base Layer.attack1(WeaponOneHand)"); //Replace "PlayerAttack" with the name of your PlayerAttack state in the animator. Don't forget to mention the layer!
+    public GameObject hand;
+    private int _playerAttackStateHash = Animator.StringToHash("Base Layer.Attack_1");
+    
     void Update()
     {
         bool shouldMove = agent.velocity.magnitude > 0.5f && agent.remainingDistance > agent.radius;
         // Update animation parameters
-        anim.SetBool("walk", shouldMove);
+        anim.SetBool("run", shouldMove);
         if(shouldMove && (Vector3.Distance(gameObject.transform.position, agent.destination) < 4)) FaceTarget(agent.destination);
     }
 
@@ -47,5 +49,17 @@ public class PlayerController : MonoBehaviour
         lookPos.y = 0;
         Quaternion rotation = Quaternion.LookRotation(lookPos);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.05f);  
+    }
+
+    public void SetHandObject(GameObject pickup)
+    {
+        if(pickup != null) 
+        {
+            InteractableItemBase item = pickup.GetComponent<InteractableItemBase>();
+            item.transform.parent = hand.transform;
+            item.transform.localPosition = item.pickupPosition;
+            item.transform.localEulerAngles = item.pickupRotation;
+            Destroy(item.gameObject.GetComponent<Rigidbody>());
+        }
     }
 }

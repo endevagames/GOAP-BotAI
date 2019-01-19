@@ -12,7 +12,9 @@ public class TreeDamageBahaviour : DamageController
         {
             var child = Stack.transform.GetChild(i);
             child.tag = "Firewood";
+            child.transform.parent = null;
         }
+        Destroy(Stack.gameObject);
         Destroy(gameObject);
     }
 }
