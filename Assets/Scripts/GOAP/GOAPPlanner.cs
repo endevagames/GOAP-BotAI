@@ -46,7 +46,7 @@ public class GOAPPlanner
                     float F, G, H;
                     if(!costs.ContainsKey(tempState))
                     {
-                        G = costs[node] + StateGetDist(startState, tempState);
+                        G = costs[node] + StateGetDist(goalState, tempState);
                         costs.Add(tempState, G);
                     }
                     else G = costs[tempState];
