@@ -46,7 +46,7 @@ public class GOAPPlanner
                     float F, G, H;
                     if(!costs.ContainsKey(tempState))
                     {
-                        G = costs[node] + StateGetDist(goalState, tempState);
+                        G = costs[node] + StateGetDist(startState, tempState);
                         costs.Add(tempState, G);
                     }
                     else G = costs[tempState];
@@ -97,7 +97,7 @@ public class GOAPPlanner
         //Return the plan
         return actionQueue;
     }
-
+    //Returns the distance between two states by comparing the number of states that are different
     public int StateGetDist(List<GOAPState> x, List<GOAPState> y)
     {
         int dist = Mathf.Abs(x.Count - y.Count);
@@ -112,6 +112,7 @@ public class GOAPPlanner
         return dist;
     }
 
+    //Loops through both sets of states from the sampleState and the goalState (since this is a regressive planner, the goalState is the startState)
     public bool GoalNodeReached(List<GOAPState> startState, List<GOAPState> sampleState)
     {
         for(var j = 0; j < sampleState.Count; j++)

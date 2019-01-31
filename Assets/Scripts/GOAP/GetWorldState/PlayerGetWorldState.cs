@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerGetWorldState : GOAPGetWorldState 
 {
+    //A simple way to set goals. Shoul be replaced with an actual method of getting the highest priority goalSet and setting it's goals
     public override List<GOAPState> getWorldState(GOAPAgent agent) 
     {
 		List<GOAPState> worldData = new List<GOAPState>();

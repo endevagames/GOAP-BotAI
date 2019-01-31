@@ -38,9 +38,14 @@ public class GOAPAgent : MonoBehaviour
     public List<InventoryItem> backpackList;
     public List<InventoryItem> carryingList;
     public Queue<GOAPAction> actionQueue = new Queue<GOAPAction>();
+    //Attach a GOAPPlanner to each agent. You can make modifications to the GOAPPlanner so that different agents use different variations
     public GOAPPlanner planner;
+    //The following variables deal with setting targets. Since targets are determined using tags, we need to find objects with a certain tag
+    //and cthen set the targetSet flag on. This is automatically done by the GOAPAgent
     private bool targetSet;
     private GameObject target;
+    //The worldStateGetter is the current stand in for retrieving the worldState and setting an appropriate GoalSet
+    //As of this version, GoalSets have not been implemented.
     public GOAPGetWorldState worldStateGetter;
     private GOAPAction currentAction;
     private bool actionActivated = false;
@@ -50,10 +55,13 @@ public class GOAPAgent : MonoBehaviour
     {
         //Set the planner
         planner = new GOAPPlanner();
+        //Create the state machine
         stateMachine = new FSM();
+        //Create the states
         idleStateInit();
         animateStateInit();
         goToStateInit();
+        //Push the idleState so that we start from there
         stateMachine.pushState(idleState);
     }
 
@@ -107,6 +115,7 @@ public class GOAPAgent : MonoBehaviour
             {
                 if(action.requiresInRange) 
                 {
+                    //If an action requires to be in range of a type of object (set by the actions targetTag), we must find one and go to it before playing the animation
                     target = FindClosestTarget(action.targetTag);
                     if(target == null)
                     {
@@ -116,6 +125,7 @@ public class GOAPAgent : MonoBehaviour
                     }
                     else
                     {
+                        //Only go to the target object if out of range
                         if(Vector3.Distance(target.transform.position, this.transform.position) > action.range)
                         {
                             targetSet = false;
@@ -123,6 +133,7 @@ public class GOAPAgent : MonoBehaviour
                         }
                         else if(action != currentAction) 
                         {
+                            //Otherwise activate the action
                             currentAction = action;
                             currentAction.activate(this);   
                             actionActivated = true;
@@ -131,6 +142,7 @@ public class GOAPAgent : MonoBehaviour
                 }
                 else if(currentAction != action)
                 {
+                    //Activate the current action
                     currentAction = action;
                     currentAction.activate(this);
                     actionActivated = true;
@@ -184,6 +196,7 @@ public class GOAPAgent : MonoBehaviour
                 }
                 else
                 {
+                    //Leave the state if we are at our destination
                     if (!navAgent.pathPending)
                     {
                         if (navAgent.remainingDistance <= navAgent.stoppingDistance)
@@ -198,6 +211,8 @@ public class GOAPAgent : MonoBehaviour
             }
         };
     }
+
+    //Following procedure finds the closest target of a certain tag
     public GameObject FindClosestTarget(string tag)
     {
         GameObject[] gos;
@@ -217,6 +232,8 @@ public class GOAPAgent : MonoBehaviour
         }
         return closest;
     }
+
+    //Prints the actions in an easy to read format
     public static string prettyPrint(Queue<GOAPAction> actions)
     {
         string s = "START->";

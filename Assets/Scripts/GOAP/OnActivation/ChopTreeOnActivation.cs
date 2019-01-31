@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChopTreeOnActivation : GOAPActionOnActivation
 {
-    // Start is called before the first frame update
+    // Overrides onActivation to set the attack animation trigger
     public override void onActivation(GOAPAgent agent)
     {
         var anim = agent.GetComponentInChildren<Animator>();

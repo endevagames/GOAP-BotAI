@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PickupAxeCheckComplete : GOAPActionCheckComplete 
 {
+    //Checks to see if the axe has been picked up
     public override bool checkComplete(GOAPAgent agent)
     {
         var anim = agent.GetComponentInChildren<Animator>();

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CollectFirewoodCheckComplete : GOAPActionCheckComplete 
 {
+    //This script checks to see if the firewood is still available
     public override bool checkComplete(GOAPAgent agent)
     {
         var anim = agent.GetComponentInChildren<Animator>();
