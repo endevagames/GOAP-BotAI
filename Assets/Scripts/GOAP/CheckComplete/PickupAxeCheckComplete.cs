@@ -8,12 +8,12 @@ public class PickupAxeCheckComplete : GOAPActionCheckComplete
     public override bool checkComplete(GOAPAgent agent)
     {
         var anim = agent.GetComponentInChildren<Animator>();
-        if(agent.target != null)
+        if(agent.Target != null)
         {
             if(anim.GetBool("hasPickedUp"))
             {
                 var controller = agent.GetComponentInParent<PlayerController>();
-                if(controller != null) controller.SetHandObject(agent.target);
+                if(controller != null) controller.SetHandObject(agent.Target);
                 anim.SetBool("hasPickedUp", false);
                 return true;
             }

@@ -32,18 +32,20 @@ public class GOAPAgent : MonoBehaviour
     private FSM.FSMState animateState; // performs an animation
     public List<GOAPAction> ActionList { get { return actionList; } }
     //We'll use a List of states to define our goalState and worldState
-    public List<GOAPState> worldState;
-    public List<GOAPState> goalState;
+    private List<GOAPState> worldState;
+    private List<GOAPState> goalState;
 
     public List<InventoryItem> backpackList;
     public List<InventoryItem> carryingList;
     public Queue<GOAPAction> actionQueue = new Queue<GOAPAction>();
     public GOAPPlanner planner;
     private bool targetSet;
-    public GameObject target;
+    private GameObject target;
     public GOAPGetWorldState worldStateGetter;
     private GOAPAction currentAction;
+    private bool actionActivated = false;
     
+    public GameObject Target { get{ return target;}}
     void Start()
     {
         //Set the planner
@@ -90,9 +92,10 @@ public class GOAPAgent : MonoBehaviour
         animateState = (fsm, gameObj) =>
         {
             GOAPAction action = actionQueue.Peek();
-            if (action.isDone(this))
+            if (action.isDone(this) && actionActivated)
             {
                 // the action is done. Remove it so we can perform the next one
+                actionActivated = false;
                 actionQueue.Dequeue();
                 if(actionQueue.Count == 0)
                 {
@@ -122,6 +125,7 @@ public class GOAPAgent : MonoBehaviour
                         {
                             currentAction = action;
                             currentAction.activate(this);   
+                            actionActivated = true;
                         }
                     }
                 }
@@ -129,6 +133,7 @@ public class GOAPAgent : MonoBehaviour
                 {
                     currentAction = action;
                     currentAction.activate(this);
+                    actionActivated = true;
                 }
             }
         };
@@ -142,14 +147,20 @@ public class GOAPAgent : MonoBehaviour
 			if (action.requiresInRange && target == null) {
 				Debug.Log("<color=red>Fatal error:</color> Action requires a target but has none. Planning failed. You did not assign the target in your Action.checkProceduralPrecondition()");
 				fsm.popState(); // move
-				fsm.popState(); // perform
+				fsm.popState(); // animate
 				fsm.pushState(idleState);
 				return;
 			}
 
 			// get the agent to move itself
 			NavMeshAgent navAgent = GetComponentInParent<NavMeshAgent>();
-            if(navAgent == null) Debug.Log("<color=red>Fatal error:</color> No NavMeshAgent attached.");
+            if(navAgent == null) 
+            {
+                fsm.popState(); // move
+                fsm.popState(); // perform
+                fsm.pushState(idleState);
+                Debug.Log("<color=red>Fatal error:</color> No NavMeshAgent attached.");
+            }
             else
             {
                 if(!targetSet)
@@ -173,7 +184,7 @@ public class GOAPAgent : MonoBehaviour
                 }
                 else
                 {
-                     if (!navAgent.pathPending)
+                    if (!navAgent.pathPending)
                     {
                         if (navAgent.remainingDistance <= navAgent.stoppingDistance)
                         {

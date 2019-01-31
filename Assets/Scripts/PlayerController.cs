@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviour
 {
     //Vars
-    public Camera camera;
     public NavMeshAgent agent;
     public Animator anim;
     private GameObject hitObject;

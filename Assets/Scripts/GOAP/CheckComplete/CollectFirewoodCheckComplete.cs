@@ -9,11 +9,11 @@ public class CollectFirewoodCheckComplete : GOAPActionCheckComplete
     {
         var anim = agent.GetComponentInChildren<Animator>();
         int _playerAttackStateHash = Animator.StringToHash("Base Layer.interact");
-        if(agent.target != null)
+        if(agent.Target != null)
         {
             if(anim.GetBool("hasPickedUp"))
             {
-                Destroy(agent.target.gameObject);
+                Destroy(agent.Target.gameObject);
                 anim.SetBool("hasPickedUp", false);
                 return true;
             }

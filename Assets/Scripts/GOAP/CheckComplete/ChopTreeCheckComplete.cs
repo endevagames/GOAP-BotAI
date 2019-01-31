@@ -10,7 +10,7 @@ public class ChopTreeCheckComplete : GOAPActionCheckComplete
         var anim = agent.GetComponentInChildren<Animator>();
         if(anim.GetBool("attack"))
         {
-            if(agent.target == null) 
+            if(agent.Target == null) 
             {
                 anim.SetBool("attack", false);
                 return true;
